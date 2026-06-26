@@ -39,7 +39,15 @@ public class TransactionService {
         System.out.println("Logged in user id: " + loggedInUser.getId());
         System.out.println("Logged in user email: " + loggedInUser.getEmail());
         transaction.setUser(loggedInUser);
-        return transactionRepository.save(transaction);
+
+
+            if (transaction.getAmount() == null || transaction.getAmount() <= 0) {
+                throw new RuntimeException("Amount must be greater than 0");
+            }
+
+            return transactionRepository.save(transaction);
+
+
     }
 
     public void deleteTransaction(int id) {
@@ -53,6 +61,8 @@ public class TransactionService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+
 
 
 }

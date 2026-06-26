@@ -37,9 +37,21 @@ public class TransactionController {
     }
 }
     @PutMapping("/transaction/{id}")
-    public ResponseEntity<String> updateTransaction(@PathVariable int id, @RequestBody Transaction transaction){
-        transactionService.addOrUpdateTransaction(transaction);
-        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    public ResponseEntity<Transaction> updateTransaction(
+            @PathVariable int id,
+            @RequestBody Transaction transaction){
+
+        Transaction existing = transactionService.getTransactionById(id);
+
+        if (existing == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        transaction.setId(id);
+
+        Transaction updated = transactionService.addOrUpdateTransaction(transaction);
+
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
 
